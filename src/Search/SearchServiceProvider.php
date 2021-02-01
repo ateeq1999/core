@@ -9,18 +9,18 @@
 
 namespace Flarum\Search;
 
+use Flarum\Discussion\Filter\AuthorFilterGambit;
+use Flarum\Discussion\Filter\CreatedFilterGambit;
+use Flarum\Discussion\Filter\HiddenFilterGambit;
+use Flarum\Discussion\Filter\UnreadFilterGambit;
 use Flarum\Discussion\Search\DiscussionSearcher;
-use Flarum\Discussion\Search\Gambit\AuthorGambit;
-use Flarum\Discussion\Search\Gambit\CreatedGambit;
 use Flarum\Discussion\Search\Gambit\FulltextGambit as DiscussionFulltextGambit;
-use Flarum\Discussion\Search\Gambit\HiddenGambit;
-use Flarum\Discussion\Search\Gambit\UnreadGambit;
 use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Event\ConfigureUserGambits;
 use Flarum\Foundation\AbstractServiceProvider;
-use Flarum\User\Search\Gambit\EmailGambit;
+use Flarum\User\Filter\EmailFilterGambit;
+use Flarum\User\Filter\GroupFilterGambit;
 use Flarum\User\Search\Gambit\FulltextGambit as UserFulltextGambit;
-use Flarum\User\Search\Gambit\GroupGambit;
 use Flarum\User\Search\UserSearcher;
 use Illuminate\Contracts\Container\Container;
 
@@ -46,8 +46,8 @@ class SearchServiceProvider extends AbstractServiceProvider
                 $gambits = new GambitManager($app);
 
                 $gambits->setFulltextGambit(UserFulltextGambit::class);
-                $gambits->add(EmailGambit::class);
-                $gambits->add(GroupGambit::class);
+                $gambits->add(EmailFilterGambit::class);
+                $gambits->add(GroupFilterGambit::class);
 
                 $app->make('events')->dispatch(
                     new ConfigureUserGambits($gambits)
@@ -65,10 +65,10 @@ class SearchServiceProvider extends AbstractServiceProvider
                 $gambits = new GambitManager($app);
 
                 $gambits->setFulltextGambit(DiscussionFulltextGambit::class);
-                $gambits->add(AuthorGambit::class);
-                $gambits->add(CreatedGambit::class);
-                $gambits->add(HiddenGambit::class);
-                $gambits->add(UnreadGambit::class);
+                $gambits->add(AuthorFilterGambit::class);
+                $gambits->add(CreatedFilterGambit::class);
+                $gambits->add(HiddenFilterGambit::class);
+                $gambits->add(UnreadFilterGambit::class);
 
                 $app->make('events')->dispatch(
                     new ConfigureDiscussionGambits($gambits)
